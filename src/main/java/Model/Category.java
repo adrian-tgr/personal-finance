@@ -5,13 +5,13 @@ import Enums.TransactionType;
 // Representa una categoría financiera en memoria
 public class Category {
 
-    // ID único en la BD
+    // id único en la BD
     private Long id;
 
     // Nombre de la categoría
     private String name;
 
-    // Tipo (INCOME o EXPENSE)
+    // Tipo (income o expense)
     private TransactionType type;
 
     // Usuario propietario

@@ -1,11 +1,10 @@
-package Vista;
+package View;
 
+import Utils.Utils;
 import java.awt.Color;
 import Dao.UserDAO;
 import Model.User;
 import javax.swing.JOptionPane;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 
 public class FrmLogin extends javax.swing.JFrame {
 
@@ -19,8 +18,6 @@ public class FrmLogin extends javax.swing.JFrame {
         passTxt.setForeground(new Color(153, 153, 153));
         this.setLocationRelativeTo(null); // Centra la ventana en pantalla
         this.userDAO = new UserDAO();     // Inicializa la conexión a la BD
-
-        passTxt.setEchoChar((char) 0); //No contraseña
 
         bg.setFocusable(true);
         bg.requestFocusInWindow();
@@ -317,7 +314,7 @@ public class FrmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_loginBtnMouseClicked
 
     private void userTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTxtMousePressed
-        ValidarCamposLlenos(userTxt, passTxt, "Ingrese su nombre de usuario", "Ingrese su contraseña");
+        Utils.configurarPlaceholder(userTxt, "Ingrese su nombre de usuario");
     }//GEN-LAST:event_userTxtMousePressed
 
     private void eyeBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eyeBtnMouseClicked
@@ -342,11 +339,8 @@ public class FrmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_eyeBtnMouseClicked
 
     private void passTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passTxtMousePressed
-        ValidarCamposLlenos(passTxt, userTxt, "Ingrese su contraseña", "Ingrese su nombre de usuario");
-        // Enmascarar
-        if (String.valueOf(passTxt.getPassword()).isEmpty()) {
-            passTxt.setEchoChar('*');
-        }
+       Utils.configurarPlaceholder(passTxt, "Ingrese su contraseña");
+       Utils.ValidarEspacios(passTxt);
     }//GEN-LAST:event_passTxtMousePressed
 
     public static void main(String args[]) {
@@ -404,29 +398,6 @@ public class FrmLogin extends javax.swing.JFrame {
     private javax.swing.JTextField userTxt;
     // End of variables declaration//GEN-END:variables
 
-    public static void ValidarCamposLlenos(JTextField campo1, JTextField campo2, String mensaje1, String mensaje2) {
-        // Al entrar al campo activo (campo1)
-        if (campo1.getText().equals(mensaje1)) {
-            campo1.setText("");
-            campo1.setForeground(Color.black);
-
-            // Si es un campo de contraseña, activa las viñetas/asteriscos al escribir
-            if (campo1 instanceof JPasswordField) {
-                ((JPasswordField) campo1).setEchoChar('*');
-            }
-        }
-
-        // Al salir del otro campo (campo2), si quedó vacío, restaura el placeholder
-        if (campo2.getText().isEmpty()) {
-            campo2.setText(mensaje2);
-            campo2.setForeground(new Color(153, 153, 153));
-
-            // Si es un campo de contraseña, quita las viñetas para que el placeholder sea legible
-            if (campo2 instanceof JPasswordField) {
-                ((JPasswordField) campo2).setEchoChar((char) 0);
-            }
-        }
-    }
 
     private void ejecutarLogin() {
         String usuarioIngresado = userTxt.getText().trim();
@@ -459,7 +430,7 @@ public class FrmLogin extends javax.swing.JFrame {
                         "Acceso Concedido",
                         JOptionPane.INFORMATION_MESSAGE);
 
-                new FrmDashboard(usuario).setVisible(true);
+                new FrmDshBoard(usuario).setVisible(true);
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this,

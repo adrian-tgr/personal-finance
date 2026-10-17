@@ -1,22 +1,28 @@
-package Vista;
+package View;
 
+import Utils.Utils;
 import java.awt.Color;
-import javax.swing.JOptionPane;
 import Dao.UserDAO;
-import Model.User;
-import Vista.FrmDashboard;
 
 public class FrmRegister extends javax.swing.JFrame {
-    
+
     int xMouse, yMouse;
     private UserDAO userDAO; // Instancia de la capa DAO
-    
+    private boolean passVisible = false;
+
     public FrmRegister() {
         initComponents();
+        EmailTxt.setForeground(new Color(153, 153, 153));
+        userTxt.setForeground(new Color(153, 153, 153));
+        passTxt.setForeground(new Color(153, 153, 153));
+        ConfirmTxt.setForeground(new Color(153, 153, 153));
         this.setLocationRelativeTo(null); // Centra la ventana en pantalla
         this.userDAO = new UserDAO();     // Inicializa la conexión a la BD
+
+        bg.setFocusable(true); //Permiso al bg
+        bg.requestFocusInWindow(); //Envia el focus
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -40,11 +46,12 @@ public class FrmRegister extends javax.swing.JFrame {
         userLabel1 = new javax.swing.JLabel();
         title = new javax.swing.JLabel();
         userLabel2 = new javax.swing.JLabel();
-        userTxt1 = new javax.swing.JTextField();
+        EmailTxt = new javax.swing.JTextField();
         jSeparator3 = new javax.swing.JSeparator();
         passLabel1 = new javax.swing.JLabel();
-        passTxt1 = new javax.swing.JPasswordField();
+        ConfirmTxt = new javax.swing.JPasswordField();
         jSeparator4 = new javax.swing.JSeparator();
+        eyeBtn = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocationByPlatform(true);
@@ -106,16 +113,14 @@ public class FrmRegister extends javax.swing.JFrame {
         BackBtn.setLayout(BackBtnLayout);
         BackBtnLayout.setHorizontalGroup(
             BackBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BackBtnLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(BackTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGroup(BackBtnLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(BackTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(8, Short.MAX_VALUE))
         );
         BackBtnLayout.setVerticalGroup(
             BackBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, BackBtnLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(BackTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(BackTxt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         exitBtn.setBackground(new java.awt.Color(255, 255, 255));
@@ -142,9 +147,7 @@ public class FrmRegister extends javax.swing.JFrame {
         exitBtn.setLayout(exitBtnLayout);
         exitBtnLayout.setHorizontalGroup(
             exitBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, exitBtnLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(exitTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(exitTxt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         exitBtnLayout.setVerticalGroup(
             exitBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -160,7 +163,7 @@ public class FrmRegister extends javax.swing.JFrame {
             .addGroup(headerLayout.createSequentialGroup()
                 .addGap(295, 295, 295)
                 .addComponent(favicon)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 330, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 345, Short.MAX_VALUE)
                 .addComponent(BackBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(exitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -196,7 +199,7 @@ public class FrmRegister extends javax.swing.JFrame {
         passLabel.setText("CONTRASEÑA");
         bg.add(passLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 260, -1, -1));
 
-        passTxt.setText("********");
+        passTxt.setText("contraseña");
         passTxt.setBorder(null);
         passTxt.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -266,20 +269,20 @@ public class FrmRegister extends javax.swing.JFrame {
         userLabel2.setText("E-MAIL");
         bg.add(userLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 100, -1, -1));
 
-        userTxt1.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
-        userTxt1.setText("Dirección Email");
-        userTxt1.setBorder(null);
-        userTxt1.addMouseListener(new java.awt.event.MouseAdapter() {
+        EmailTxt.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
+        EmailTxt.setText("Dirección Email");
+        EmailTxt.setBorder(null);
+        EmailTxt.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                userTxt1MousePressed(evt);
+                EmailTxtMousePressed(evt);
             }
         });
-        userTxt1.addActionListener(new java.awt.event.ActionListener() {
+        EmailTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                userTxt1ActionPerformed(evt);
+                EmailTxtActionPerformed(evt);
             }
         });
-        bg.add(userTxt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 130, 410, 30));
+        bg.add(EmailTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 130, 410, 30));
 
         jSeparator3.setForeground(new java.awt.Color(0, 0, 0));
         bg.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 160, 410, 20));
@@ -289,22 +292,30 @@ public class FrmRegister extends javax.swing.JFrame {
         passLabel1.setText("CONFIRMAR CONTRASEÑA");
         bg.add(passLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 340, -1, -1));
 
-        passTxt1.setText("********");
-        passTxt1.setBorder(null);
-        passTxt1.addMouseListener(new java.awt.event.MouseAdapter() {
+        ConfirmTxt.setText("contraseña");
+        ConfirmTxt.setBorder(null);
+        ConfirmTxt.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                passTxt1MousePressed(evt);
+                ConfirmTxtMousePressed(evt);
             }
         });
-        passTxt1.addActionListener(new java.awt.event.ActionListener() {
+        ConfirmTxt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                passTxt1ActionPerformed(evt);
+                ConfirmTxtActionPerformed(evt);
             }
         });
-        bg.add(passTxt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 370, 410, 30));
+        bg.add(ConfirmTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 370, 410, 30));
 
         jSeparator4.setForeground(new java.awt.Color(0, 0, 0));
         bg.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 400, 410, 20));
+
+        eyeBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/ojo.png"))); // NOI18N
+        eyeBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                eyeBtnMouseClicked(evt);
+            }
+        });
+        bg.add(eyeBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 290, 30, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -350,68 +361,80 @@ public class FrmRegister extends javax.swing.JFrame {
     }//GEN-LAST:event_loginBtnTxtMouseEntered
 
     private void loginBtnTxtMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginBtnTxtMouseExited
-        loginBtn.setBackground(new Color(0,134,190));
+        loginBtn.setBackground(new Color(0, 134, 190));
     }//GEN-LAST:event_loginBtnTxtMouseExited
 
     private void userTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTxtMousePressed
-        if (userTxt.getText().equals("Ingrese su nombre de usuario")) {
-            userTxt.setText("");
-            userTxt.setForeground(Color.black);
-        }
-        if (String.valueOf(passTxt.getPassword()).isEmpty()) {
-            passTxt.setText("********");
-            passTxt.setForeground(Color.gray);
-        }
+        Utils.configurarPlaceholder(userTxt, "Ingrese un nombre de usuario");
     }//GEN-LAST:event_userTxtMousePressed
 
     private void passTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passTxtMousePressed
-        if (String.valueOf(passTxt.getPassword()).equals("********")) {
-            passTxt.setText("");
-            passTxt.setForeground(Color.black);
-        }
-        if (userTxt.getText().isEmpty()) {
-            userTxt.setText("Ingrese su nombre de usuario");
-            userTxt.setForeground(Color.gray);
-        }
+        Utils.configurarPlaceholder(passTxt, "contraseña");
+        Utils.ValidarEspacios(passTxt);
     }//GEN-LAST:event_passTxtMousePressed
 
     private void loginBtnTxtMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginBtnTxtMouseClicked
-    javax.swing.JOptionPane.showMessageDialog(this, "Intento de login con los datos:\nUsuario: " + userTxt.getText() + "\nContraseña: " + String.valueOf(passTxt.getPassword()), "LOGIN", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        javax.swing.JOptionPane.showMessageDialog(this, "Intento de login con los datos:\nUsuario: " + userTxt.getText() + "\nContraseña: " + String.valueOf(passTxt.getPassword()), "LOGIN", javax.swing.JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_loginBtnTxtMouseClicked
 
     private void passTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passTxtActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_passTxtActionPerformed
 
-    private void userTxt1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTxt1MousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_userTxt1MousePressed
+    private void EmailTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EmailTxtMousePressed
+        Utils.configurarPlaceholder(EmailTxt, "Dirección Email");
+        Utils.ValidarEspacios(EmailTxt);
+    }//GEN-LAST:event_EmailTxtMousePressed
 
-    private void userTxt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userTxt1ActionPerformed
+    private void EmailTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmailTxtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_userTxt1ActionPerformed
+    }//GEN-LAST:event_EmailTxtActionPerformed
 
-    private void passTxt1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passTxt1MousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_passTxt1MousePressed
+    private void ConfirmTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ConfirmTxtMousePressed
+        Utils.configurarPlaceholder(ConfirmTxt, "contraseña");
+        Utils.ValidarEspacios(ConfirmTxt);
+    }//GEN-LAST:event_ConfirmTxtMousePressed
 
-    private void passTxt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passTxt1ActionPerformed
+    private void ConfirmTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfirmTxtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_passTxt1ActionPerformed
+    }//GEN-LAST:event_ConfirmTxtActionPerformed
 
     private void BackTxtMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackTxtMouseClicked
         new FrmLogin().setVisible(true);
         this.setVisible(false);
-        
+
     }//GEN-LAST:event_BackTxtMouseClicked
 
     private void BackTxtMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackTxtMouseEntered
-        // TODO add your handling code here:
+        BackBtn.setBackground(new Color(0,51,102));
+        BackTxt.setForeground(Color.white);
     }//GEN-LAST:event_BackTxtMouseEntered
 
     private void BackTxtMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackTxtMouseExited
-        // TODO add your handling code here:
+        BackBtn.setBackground(Color.white);
+        BackTxt.setForeground(Color.black);
     }//GEN-LAST:event_BackTxtMouseExited
+
+    private void eyeBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eyeBtnMouseClicked
+        String passTexto = String.valueOf(passTxt.getPassword());
+
+        // Evitar activar el ojo si aún tiene el mensaje de placeholder
+        if (passTexto.equals("contraseña") || passTexto.isEmpty()) {
+            return;
+        }
+
+        if (passVisible) {
+            // Ocultar la contraseña
+            passTxt.setEchoChar('*');
+            eyeBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/ojo.png")));
+            passVisible = false;
+        } else {
+            // Mostrar la contraseña
+            passTxt.setEchoChar((char) 0);
+            eyeBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/ojo b.png")));
+            passVisible = true;
+        }
+    }//GEN-LAST:event_eyeBtnMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -455,9 +478,12 @@ public class FrmRegister extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel BackBtn;
     private javax.swing.JLabel BackTxt;
+    private javax.swing.JPasswordField ConfirmTxt;
+    private javax.swing.JTextField EmailTxt;
     private javax.swing.JPanel bg;
     private javax.swing.JPanel exitBtn;
     private javax.swing.JLabel exitTxt;
+    private javax.swing.JLabel eyeBtn;
     private javax.swing.JLabel favicon;
     private javax.swing.JPanel header;
     private javax.swing.JSeparator jSeparator1;
@@ -471,11 +497,9 @@ public class FrmRegister extends javax.swing.JFrame {
     private javax.swing.JLabel passLabel;
     private javax.swing.JLabel passLabel1;
     private javax.swing.JPasswordField passTxt;
-    private javax.swing.JPasswordField passTxt1;
     private javax.swing.JLabel title;
     private javax.swing.JLabel userLabel1;
     private javax.swing.JLabel userLabel2;
     private javax.swing.JTextField userTxt;
-    private javax.swing.JTextField userTxt1;
     // End of variables declaration//GEN-END:variables
 }
