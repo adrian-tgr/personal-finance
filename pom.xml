@@ -30,6 +30,20 @@
 			<artifactId>AbsoluteLayout</artifactId>
 			<version>RELEASE210</version>
 		</dependency>
+
+		<!-- MigLayout Swing (Versión oficial Maven) -->
+		<dependency>
+			<groupId>com.miglayout</groupId>
+			<artifactId>miglayout-swing</artifactId>
+			<version>5.2</version>
+		</dependency>
+
+		<!-- TimingFramework (Versión oficial Maven) -->
+		<dependency>
+			<groupId>net.java.dev.timingframework</groupId>
+			<artifactId>timingframework</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
