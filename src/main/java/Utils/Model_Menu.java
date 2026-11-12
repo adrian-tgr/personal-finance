@@ -45,10 +45,14 @@ public class Model_Menu {
     }
 
     public ImageIcon toIcon() {
+        if (icono == null || icono.trim().isEmpty()) {
+            return new ImageIcon();
+        }
+
         URL location = getClass().getResource("/Images/" + icono);
 
         if (location == null) {
-            System.err.println("Imagen no encontrada: /Imagenes/" + icono);
+            System.err.println("Imagen no encontrada: /Images/" + icono);
             return new ImageIcon();
         }
 

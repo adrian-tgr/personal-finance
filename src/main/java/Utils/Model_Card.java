@@ -1,6 +1,5 @@
 package Utils;
 
-import java.net.URL;
 import javax.swing.Icon;
 
 public class Model_Card {
@@ -8,24 +7,23 @@ public class Model_Card {
     private Icon icon;
     private String title;
     private String month;
-    private long cash;
+    private double values;
 
     public Model_Card() {
     }
 
-    public Model_Card(Icon icon, String title, String month, long cash) {
+    public Model_Card(Icon icon, String title, String month, double values) {
         this.icon = icon;
         this.title = title;
         this.month = month;
-        this.cash = cash;
+        this.values = values;
     }
 
-    public Model_Card(Icon icon, String title, long cash) {
+    public Model_Card(Icon icon, String title, double values) {
         this.icon = icon;
         this.title = title;
-        this.cash = cash;
+        this.values = values;
     }
-    
 
     public Icon getIcon() {
         return icon;
@@ -51,15 +49,13 @@ public class Model_Card {
         this.month = month;
     }
 
-    public long getCash() {
-        return cash;
+    public double getValues() {
+        return values;
     }
 
-    public void setCash(long cash) {
-        this.cash = cash;
+    public void setValues(double values) {
+        this.values = values;
     }
-
-    
 
     
 }

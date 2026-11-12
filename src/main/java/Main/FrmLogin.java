@@ -1,5 +1,6 @@
 package Main;
 
+import Components.BackGround;
 import Utils.Utils;
 import java.awt.Color;
 import Dao.UserDAO;
@@ -197,10 +198,7 @@ public class FrmLogin extends javax.swing.JFrame {
         loginBtn.setLayout(loginBtnLayout);
         loginBtnLayout.setHorizontalGroup(
             loginBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(loginBtnLayout.createSequentialGroup()
-                .addGap(90, 90, 90)
-                .addComponent(loginBtnTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(110, Short.MAX_VALUE))
+            .addComponent(loginBtnTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
         );
         loginBtnLayout.setVerticalGroup(
             loginBtnLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -309,6 +307,7 @@ public class FrmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_RegisLabelMouseClicked
 
     private void loginBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginBtnMouseClicked
+
         new FrmDshBoard().setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_loginBtnMouseClicked
@@ -339,8 +338,8 @@ public class FrmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_eyeBtnMouseClicked
 
     private void passTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passTxtMousePressed
-       Utils.configurarPlaceholder(passTxt, "Ingrese su contraseña");
-       Utils.ValidarEspacios(passTxt);
+        Utils.configurarPlaceholder(passTxt, "Ingrese su contraseña");
+        Utils.ValidarEspacios(passTxt);
     }//GEN-LAST:event_passTxtMousePressed
 
     public static void main(String args[]) {
@@ -398,10 +397,10 @@ public class FrmLogin extends javax.swing.JFrame {
     private javax.swing.JTextField userTxt;
     // End of variables declaration//GEN-END:variables
 
-
     private void ejecutarLogin() {
         String usuarioIngresado = userTxt.getText().trim();
         String passwordIngresada = new String(passTxt.getPassword()).trim();
+        String nombre = userTxt.getText();
 
         // Validar campos obligatorios utilizando los helpers
         if (esInvalido(usuarioIngresado, "Ingrese su nombre de usuario")) {
@@ -425,28 +424,19 @@ public class FrmLogin extends javax.swing.JFrame {
             User usuario = userDAO.autenticarUsuario(usuarioIngresado, passwordIngresada);
 
             if (usuario != null) {
-                JOptionPane.showMessageDialog(this,
-                        "¡Bienvenido/a de nuevo, " + usuario.getNombre() + "!",
-                        "Acceso Concedido",
-                        JOptionPane.INFORMATION_MESSAGE);
-
-                new FrmDshBoard(usuario).setVisible(true);
-                this.dispose();
+                // Autenticación Exitosa: Abrir pantalla principal
+                FrmDshBoard principal = new FrmDshBoard();
+                principal.setVisible(true);
+                this.dispose(); // Cerrar ventana de Login
             } else {
+                // Credenciales incorrectas
                 JOptionPane.showMessageDialog(this,
                         "Usuario o contraseña incorrectos.",
                         "Error de Autenticación",
                         JOptionPane.ERROR_MESSAGE);
-
-                passTxt.setText("");
-                passTxt.setForeground(Color.black);
-                passTxt.requestFocus();
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al conectar con la base de datos:\n" + e.getMessage(),
-                    "Error de Conexión",
-                    JOptionPane.ERROR_MESSAGE);
+            System.out.println("Error general en login: " + e.getMessage());
         }
     }
 

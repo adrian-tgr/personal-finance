@@ -39,8 +39,12 @@ public class Card extends javax.swing.JPanel {
         if (data.getIcon() != null) {
             lbTitle.setIcon(data.getIcon());
         }
-        lbTitle.setText(data.getIcon() + " " + data.getTitle() + " [" + data.getMonth() + ")");
-        lbCash.setText(String.format("$ %,d", data.getCash()));
+        // Si month es null o vacío, se muestra solo el título
+        String periodo = (data.getMonth() != null) ? " [" + data.getMonth() + "]" : "";
+        lbTitle.setText(data.getTitle() + periodo);
+
+        //formato moneda
+        lbCash.setText(String.format("$ %,.2f", data.getValues()));
     }
 
     @Override
@@ -70,11 +74,11 @@ public class Card extends javax.swing.JPanel {
         lbTitle = new javax.swing.JLabel();
         lbCash = new javax.swing.JLabel();
 
-        lbTitle.setFont(new java.awt.Font("Roboto SemiCondensed", 0, 24)); // NOI18N
+        lbTitle.setFont(new java.awt.Font("Roboto SemiCondensed", 0, 18)); // NOI18N
         lbTitle.setForeground(new java.awt.Color(255, 255, 255));
         lbTitle.setText("Title");
 
-        lbCash.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+        lbCash.setFont(new java.awt.Font("Roboto", 0, 24)); // NOI18N
         lbCash.setForeground(new java.awt.Color(255, 255, 255));
         lbCash.setText("Cash");
 
@@ -82,12 +86,15 @@ public class Card extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(39, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(16, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbCash, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lbTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lbCash, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

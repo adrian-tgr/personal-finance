@@ -2,6 +2,10 @@
 package Utils.Estructurs;
 
 //Sera utilizada para manejar historial de transacciones
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Pila<T> {
     private Nodo<T> cima;
     private int tam;
@@ -16,8 +20,8 @@ public class Pila<T> {
     }
 
     public void push(T dato) {
-        Nodo<T> nuevoNodo = new Nodo<>(dato, cima); // Crea nuevo nodo, envia el tipo de dato y lo referencia al que es
-                                                    // la cima
+        Nodo<T> nuevoNodo = new Nodo<>(dato, cima); // Crea nuevo nodo, envia el tipo de dato 
+        //y lo referencia al que es la cima
         cima = nuevoNodo; // Coloca el nuevo nodo como cima
         tam++;
     }
@@ -48,5 +52,15 @@ public class Pila<T> {
     public void Limpar() {
         this.cima = null;
         this.tam = 0;
+    }
+    
+    public List<T> aLista() {
+        List<T> lista = new ArrayList<>(); //Listta auxiliar para ir desapilando y guardando
+        Nodo<T> actual = cima;
+        while (actual != null) {
+            lista.add(actual.getDato());
+            actual = actual.getSiguiente();
+        }
+        return lista; //Devolver lista
     }
 }

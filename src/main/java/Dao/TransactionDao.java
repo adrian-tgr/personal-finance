@@ -1,52 +1,84 @@
 package Dao;
 
-import Model.Transaction;
 import java.sql.*; //Connection, PreparedStatement, ResultSet, SQLException
 import DataBase.ConexionBD;
+import com.raven.model.ModelTransaction;
 
 public class TransactionDao {
-    // Método para insertar una nueva transacción en PostgreSQL
-    public boolean agregar(Transaction t) {
-        //consulta SQL para insertar un nuevo registro en la tabla transactions
-        String sql = "INSERT INTO transactions (amount, description, date, type, category_id, user_id) VALUES (?, ?, ?, ?, ?, ?) RETURNING id"; 
-        // ? se remplazan por los datos reales y retorna el id
 
-        try (Connection conn = ConexionBD.obtenerConexion();//Llama a conexion para abrir el canal con SQL
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    public boolean agregar(ModelTransaction t) {
+        // Consulta SQL para insertar el registro y retornar el ID generado por PostgreSQL
+        String sql = "INSERT INTO transactions (description, category, date, type, amount) VALUES (?, ?, ?, ?, ?) RETURNING id";
 
-            stmt.setDouble(1, t.getMonto());//Reemplaza 1er "?" con el valor del monto
-            stmt.setString(2, t.getDescripcion()); //Reemplaza el segundo "?"" con la descripcion
-            stmt.setTimestamp(3, new java.sql.Timestamp(t.getDate().getTime()));//Le envia la fecha de la transaccion a postgre
-            stmt.setString(4, t.getType().name());//Reemplaza con el tipo de transaccion
-            stmt.setLong(5, t.getCategory().getId());//ID numérico de la categoría a la que pertenece la transacción
-            stmt.setLong(6, t.getUser().getId()); //ID del usuario
+        try (Connection conn = ConexionBD.obtenerConexion(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            //obtener el ID generado en la BD
-            ResultSet rs = stmt.executeQuery(); //Guardar consulta de la base de datos
-            if (rs.next()) {//Comprueba si postgre envio el id
-                t.setId(rs.getLong("id")); // Asigna el ID retornado al objeto
+            // Asignación de parámetros a los comodines (?) de la SQL
+            stmt.setString(1, t.getDescription());
+            stmt.setString(2, t.getCategory());
+            stmt.setString(3, t.getDate());
+            stmt.setString(4, t.getType());
+            stmt.setDouble(5, t.getAmount());
+
+            // Ejecutar la consulta y guardar el id devuelto por SQL
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                // Asignar el id recién generado al objeto ModelTransaction
+                t.setId(rs.getLong("id"));
                 return true;
             }
+
         } catch (SQLException e) {
-            System.err.println("Error al insertar transacción: " + e.getMessage());
+            System.err.println("Error al insertar transacción en PostgreSQL: " + e.getMessage());
         }
         return false;
     }
 
     //eliminar una transacción
-    public boolean eliminar(Long id) {
+    public boolean eliminar(long id) {
         String sql = "DELETE FROM transactions WHERE id = ?";
-        //Abrir conexion
-        try (Connection conn = ConexionBD.obtenerConexion();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        try (Connection conn = ConexionBD.obtenerConexion(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
-            //Si afecta almenos 1 fila significa que elimino la transaccion
-            return stmt.executeUpdate() > 0; 
+
+            // Retorna true si afectó al menos a 1 fila en la base de datos
+            return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            System.err.println("Error al eliminar transacción: " + e.getMessage());
+            System.err.println("Error al eliminar transacción en PostgreSQL: " + e.getMessage());
             return false;
         }
+    }
+
+    public java.util.List<ModelTransaction> listar() {
+        java.util.List<ModelTransaction> lista = new java.util.ArrayList<>();
+        String sql = "SELECT id, description, category, date, type, amount FROM transactions ORDER BY id ASC";
+
+        try (Connection conn = DataBase.ConexionBD.obtenerConexion(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String tipo = rs.getString("type");
+
+                // Asignar icono dinámico según el tipo de movimiento
+                String iconPath = tipo.equalsIgnoreCase("Ingreso") ? "/Images/plus.png" : "/Images/less.png";
+                javax.swing.ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource(iconPath));
+
+                // Se instancia usando el constructor con ID
+                ModelTransaction t = new ModelTransaction(
+                        icon,
+                        rs.getString("description"),
+                        rs.getString("category"),
+                        rs.getString("date"),
+                        tipo,
+                        rs.getDouble("amount"),
+                        rs.getLong("id")
+                );
+                lista.add(t);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al consultar transacciones en BD: " + e.getMessage());
+        }
+        return lista;
     }
 }
