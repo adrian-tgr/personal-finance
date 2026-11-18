@@ -2,6 +2,8 @@ package com.raven.model;
 
 //REPRESENTAR CADA MOVIMIENTO FINANCIERO
 import javax.swing.Icon;
+import com.raven.swing.table.EventAction;
+import com.raven.swing.table.ModelAction;
 
 public class ModelTransaction {
 
@@ -97,6 +99,17 @@ public class ModelTransaction {
             date,
             amount,
             type
+        };
+    }
+
+    // Nuevo método para la tabla con columna de Acciones (5 columnas)
+    public Object[] toRowTable(EventAction event) {
+        return new Object[]{
+            description,
+            date,
+            amount,
+            type,
+            new ModelAction(this, event)
         };
     }
 }

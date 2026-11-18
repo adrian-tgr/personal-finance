@@ -1,12 +1,11 @@
-
 package Utils.Estructurs;
 
 //Sera utilizada para manejar historial de transacciones
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Pila<T> {
+
     private Nodo<T> cima;
     private int tam;
 
@@ -26,7 +25,7 @@ public class Pila<T> {
         tam++;
     }
 
-    public T prop() {
+    public T pop() {
         if (Vacia()) {
             return null;
         }
@@ -53,7 +52,7 @@ public class Pila<T> {
         this.cima = null;
         this.tam = 0;
     }
-    
+
     public List<T> aLista() {
         List<T> lista = new ArrayList<>(); //Listta auxiliar para ir desapilando y guardando
         Nodo<T> actual = cima;
@@ -62,5 +61,92 @@ public class Pila<T> {
             actual = actual.getSiguiente();
         }
         return lista; //Devolver lista
+    }
+    // 1. Obtener la transacción de una fila específica sin alterar el orden de la pila
+
+    public T obtenerPorIndice(int indiceObjetivo) {
+        if (Vacia() || indiceObjetivo < 0 || indiceObjetivo >= tam) {
+            return null;
+        }
+
+        Pila<T> pilaAuxiliar = new Pila<>();
+        T encontrado = null;
+        int indiceActual = 0;
+
+        // Desapilar hasta llegar a la profundidad deseada
+        while (!Vacia()) {
+            T elemento = pop();
+            pilaAuxiliar.push(elemento);
+            if (indiceActual == indiceObjetivo) {
+                encontrado = elemento;
+                break;
+            }
+            indiceActual++;
+        }
+
+        // Devolver todo a la pila original en su mismo orden LIFO
+        while (!pilaAuxiliar.Vacia()) {
+            push(pilaAuxiliar.pop());
+        }
+
+        return encontrado;
+    }
+
+// Eliminar una transacción específica desapilando en una auxiliar y re-apilando rápido
+    public boolean eliminarPorIndice(int indiceObjetivo) {
+        if (Vacia() || indiceObjetivo < 0 || indiceObjetivo >= tam) {
+            return false;
+        }
+
+        Pila<T> pilaAuxiliar = new Pila<>();
+        int indiceActual = 0;
+        boolean eliminado = false;
+
+        // Desapilar rápido solo hasta llegar a la fila seleccionada
+        while (!Vacia()) {
+            T elemento = pop();
+            if (indiceActual == indiceObjetivo) {
+                eliminado = true;
+                break;
+            } else {
+                pilaAuxiliar.push(elemento);
+                indiceActual++;
+            }
+        }
+
+        // Volver a apilar los elementos superiores en su orden original
+        while (!pilaAuxiliar.Vacia()) {
+            push(pilaAuxiliar.pop());
+        }
+
+        return eliminado;
+    }
+
+    public boolean actualizarPorIndice(int indiceObjetivo, T nuevoDato) {
+        if (Vacia() || indiceObjetivo < 0 || indiceObjetivo >= tam) {
+            return false;
+        }
+
+        Pila<T> pilaAuxiliar = new Pila<>();
+        int indiceActual = 0;
+        boolean actualizado = false;
+
+        while (!Vacia()) {
+            T elemento = pop();
+            if (indiceActual == indiceObjetivo) {
+                pilaAuxiliar.push(nuevoDato); // Reemplazar el nodo editado
+                actualizado = true;
+                break;
+            } else {
+                pilaAuxiliar.push(elemento);
+                indiceActual++;
+            }
+        }
+
+        while (!pilaAuxiliar.Vacia()) {
+            push(pilaAuxiliar.pop());
+        }
+
+        return actualizado;
     }
 }

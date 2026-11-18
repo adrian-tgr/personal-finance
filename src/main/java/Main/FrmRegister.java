@@ -389,9 +389,7 @@ public class FrmRegister extends javax.swing.JFrame {
         }
 
         // Crear objeto User asignando el correo y la fecha de creación
-        // (Ajusta el email si tienes un campo txtEmail, si no, genera uno temporal)
         String email = nombre.contains("@") ? nombre : nombre.toLowerCase() + "@mail.com";
-
         Model.User nuevoUsuario = new Model.User();
         nuevoUsuario.setNombre(nombre);
         nuevoUsuario.setEmail(email);

@@ -26,7 +26,7 @@ public class CategoryDAO {
         String sql = "INSERT INTO categorias (name, type, user_id) VALUES (?, ?, ?)";
         
         // Conexión y preparación
-        try (Connection con = ConexionBD.obtenerConexion();
+        try (Connection con = ConexionBD.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             
             // Asignación de datos
@@ -54,7 +54,7 @@ public class CategoryDAO {
         String sql = "SELECT * FROM categorias WHERE user_id = ?";
         
         // Conexión y preparación
-        try (Connection con = ConexionBD.obtenerConexion();
+        try (Connection con = ConexionBD.getConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
             
             // Filtro por ID de usuario

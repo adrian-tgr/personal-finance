@@ -23,7 +23,7 @@ public class UserDAO {
         String sql = "INSERT INTO usuarios (nombre, email, password, fecha_creacion) VALUES (?, ?, ?, ?)"; // ? funcionan como espacios reservados
 
         // Conexión y preparación de la consulta
-        try (Connection con = ConexionBD.obtenerConexion(); PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = ConexionBD.getConexion(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             // Asignación de datos
             ps.setString(1, usuario.getNombre());
@@ -51,7 +51,7 @@ public class UserDAO {
 
         User usuarioEncontrado = null;
 
-        try (Connection con = ConexionBD.obtenerConexion(); PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = ConexionBD.getConexion(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, usuarioOCorreo);
             ps.setString(2, usuarioOCorreo);
@@ -78,7 +78,7 @@ public class UserDAO {
     public boolean existeEmail(String email) {
         String sql = "SELECT COUNT(*) FROM usuarios WHERE LOWER(email) = LOWER(?)";
 
-        try (Connection con = ConexionBD.obtenerConexion(); PreparedStatement ps = con.prepareStatement(sql)) {
+        try (Connection con = ConexionBD.getConexion(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {

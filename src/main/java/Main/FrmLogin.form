@@ -188,13 +188,13 @@
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Images/favicon.png"/>
+              <Image iconType="3" name="/Images/Black-Logo x64.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="PERSONAL FINANCE"/>
+            <Property name="text" type="java.lang.String" value="  PERSONAL FINANCE"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="40" y="60" width="-1" height="-1"/>
+              <AbsoluteConstraints x="100" y="60" width="340" height="70"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -210,7 +210,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="50" y="140" width="-1" height="-1"/>
+              <AbsoluteConstraints x="50" y="150" width="-1" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -390,6 +390,7 @@
             <Property name="text" type="java.lang.String" value="Ingrese su contrase&#xf1;a"/>
           </Properties>
           <Events>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="passTxtFocusLost"/>
             <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="passTxtMousePressed"/>
           </Events>
           <Constraints>

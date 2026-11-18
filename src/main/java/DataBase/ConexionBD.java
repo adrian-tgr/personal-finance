@@ -13,7 +13,7 @@ public class ConexionBD {
      
     private static final String PASSWORD = "134611"; 
 
-    public static Connection obtenerConexion() throws SQLException {
+    public static Connection getConexion() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }

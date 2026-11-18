@@ -1,6 +1,5 @@
 package Main;
 
-import Components.BackGround;
 import Utils.Utils;
 import java.awt.Color;
 import Dao.UserDAO;
@@ -133,14 +132,14 @@ public class FrmLogin extends javax.swing.JFrame {
 
         favicon.setFont(new java.awt.Font("Roboto Black", 1, 24)); // NOI18N
         favicon.setForeground(new java.awt.Color(0, 0, 0));
-        favicon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/favicon.png"))); // NOI18N
-        favicon.setText("PERSONAL FINANCE");
-        bg.add(favicon, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, -1, -1));
+        favicon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Black-Logo x64.png"))); // NOI18N
+        favicon.setText("  PERSONAL FINANCE");
+        bg.add(favicon, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 60, 340, 70));
 
         title.setFont(new java.awt.Font("Roboto Black", 1, 24)); // NOI18N
         title.setForeground(new java.awt.Color(0, 0, 0));
         title.setText("INICIAR SESIÓN");
-        bg.add(title, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 140, -1, -1));
+        bg.add(title, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
 
         RegisLabel.setFont(new java.awt.Font("Roboto Light", 1, 14)); // NOI18N
         RegisLabel.setForeground(new java.awt.Color(102, 102, 102));
@@ -235,6 +234,11 @@ public class FrmLogin extends javax.swing.JFrame {
         bg.add(eyeBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 320, 30, 30));
 
         passTxt.setText("Ingrese su contraseña");
+        passTxt.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                passTxtFocusLost(evt);
+            }
+        });
         passTxt.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 passTxtMousePressed(evt);
@@ -308,7 +312,7 @@ public class FrmLogin extends javax.swing.JFrame {
 
     private void loginBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginBtnMouseClicked
 
-        new FrmDshBoard().setVisible(true);
+        new Main().setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_loginBtnMouseClicked
 
@@ -338,9 +342,29 @@ public class FrmLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_eyeBtnMouseClicked
 
     private void passTxtMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passTxtMousePressed
-        Utils.configurarPlaceholder(passTxt, "Ingrese su contraseña");
+        String passActual = String.valueOf(passTxt.getPassword());
+        if (passActual.equals("Ingrese su contraseña")) {
+            passTxt.setText("");
+            passTxt.setForeground(Color.BLACK);
+            if (!passVisible) {
+                passTxt.setEchoChar('*'); // Activa los asteriscos al escribir
+            }
+        }
         Utils.ValidarEspacios(passTxt);
     }//GEN-LAST:event_passTxtMousePressed
+
+    private void passTxtFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_passTxtFocusLost
+        String passActual = String.valueOf(passTxt.getPassword());
+        if (passActual.isEmpty()) {
+            passTxt.setText("Ingrese su contraseña");
+            passTxt.setForeground(new Color(153, 153, 153));
+            passTxt.setEchoChar((char) 0); // Vuelve a mostrar el texto guía legible
+            passVisible = false;
+            eyeBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/ojo.png")));
+        } else if (!passVisible) {
+            passTxt.setEchoChar('*'); // Asegura que siga oculta con asteriscos al soltar el campo
+        }
+    }//GEN-LAST:event_passTxtFocusLost
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -424,23 +448,21 @@ public class FrmLogin extends javax.swing.JFrame {
             User usuario = userDAO.autenticarUsuario(usuarioIngresado, passwordIngresada);
 
             if (usuario != null) {
-                // Autenticación Exitosa: Abrir pantalla principal
-                FrmDshBoard principal = new FrmDshBoard();
+                Main principal = new Main(usuario);
                 principal.setVisible(true);
                 this.dispose(); // Cerrar ventana de Login
             } else {
-                // Credenciales incorrectas
                 JOptionPane.showMessageDialog(this,
                         "Usuario o contraseña incorrectos.",
                         "Error de Autenticación",
                         JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
+            e.printStackTrace(); // <-- Imprimirá en rojo el archivo y número de línea exactos
             System.out.println("Error general en login: " + e.getMessage());
         }
     }
 
-//Métodos para evitar código repetido
 // Comprueba si el texto está vacío o contiene el placeholder
     private boolean esInvalido(String texto, String placeholder) {
         return texto.isEmpty() || texto.equals(placeholder);

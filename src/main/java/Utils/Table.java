@@ -1,41 +1,32 @@
 package Utils;
 
+import Utils.TableActionRender;
+import Utils.TableActionEditor;
+import com.raven.event.TableActionEvent;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-
 import com.raven.model.ModelTransaction;
 
 public class Table extends JTable {
 
     public Table() {
-        // 1. Configurar exactamente las 4 columnas de la vista
-        DefaultTableModel model = new DefaultTableModel(
-            new Object[][] {},
-            new String[] { "Descripción", "Fecha", "Monto", "Tipo" }
-        ) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false; // Bloquear edición de celdas
-            }
-        };
-        setModel(model);
+        configurarColumnas();
 
         setShowHorizontalLines(true);
         setGridColor(new Color(230, 230, 230));
         setRowHeight(40);
-        getTableHeader().setReorderingAllowed(false); // Bloquear el reordenamiento de columnas
+        getTableHeader().setReorderingAllowed(false);
 
-        //Renderizador personalizado de la cabecera
+        // Renderizador de cabecera
         getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable jtable, Object o, boolean isSelected,
                     boolean hasFocus, int row, int column) {
-                TableHeader header = new TableHeader(o + "");
-                return header;
+                return new TableHeader(o + "");
             }
         });
 
@@ -44,19 +35,17 @@ public class Table extends JTable {
             @Override
             public Component getTableCellRendererComponent(JTable jtable, Object o, boolean selected, boolean focus,
                     int row, int column) {
-                
-                // Columna 2: Monto (Formato moneda $ 0.00 alineado a la derecha)
-                if (column == 2) { 
+
+                if (column == 2) { // Monto
                     JLabel label = new JLabel();
                     if (o instanceof Double) {
-                        double monto = (Double) o;
-                        label.setText(String.format("$ %,.2f", monto));
+                        label.setText(String.format("$ %,.2f", (Double) o));
                     } else {
                         label.setText(o != null ? o.toString() : "");
                     }
-                    label.setHorizontalAlignment(JLabel.RIGHT);
+                    label.setHorizontalAlignment(JLabel.CENTER);
                     label.setOpaque(true);
-                    
+
                     if (selected) {
                         label.setBackground(new Color(230, 240, 250));
                         label.setForeground(new Color(15, 89, 140));
@@ -67,7 +56,6 @@ public class Table extends JTable {
                     return label;
                 }
 
-                // Celdas normales (Descripción, Fecha, Tipo)
                 Component com = super.getTableCellRendererComponent(jtable, o, selected, focus, row, column);
                 com.setBackground(Color.WHITE);
                 setBorder(noFocusBorder);
@@ -82,18 +70,45 @@ public class Table extends JTable {
         });
     }
 
-    // Agrega una fila simple de objetos
+    private void configurarColumnas() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Descripción", "Fecha", "Monto", "Tipo", "Acciones"}
+        ) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return columnIndex == 4;
+            }
+        };
+        setModel(model);
+        setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+        // Proporciones compactas para las 5 columnas
+        getColumnModel().getColumn(0).setPreferredWidth(220);
+        getColumnModel().getColumn(1).setPreferredWidth(100);
+        getColumnModel().getColumn(2).setPreferredWidth(110);
+        getColumnModel().getColumn(3).setPreferredWidth(90);
+
+        getColumnModel().getColumn(4).setCellRenderer(new TableActionRender());
+        getColumnModel().getColumn(4).setMinWidth(95);
+        getColumnModel().getColumn(4).setPreferredWidth(100);
+        getColumnModel().getColumn(4).setMaxWidth(110);
+    }
+
+    public void setActionEvent(TableActionEvent event) {
+        configurarColumnas();
+        getColumnModel().getColumn(4).setCellEditor(new TableActionEditor(event));
+    }
+
     public void addRow(Object[] row) {
         DefaultTableModel mod = (DefaultTableModel) getModel();
         mod.addRow(row);
     }
 
-    // Agrega un objeto ModelTransaction transformándolo en 4 celdas
     public void addTransactionRow(ModelTransaction data) {
         addRow(data.toRowTable());
     }
 
-    // Vacía las filas de la tabla antes de refrescar la Pila LIFO
     public void clear() {
         DefaultTableModel mod = (DefaultTableModel) getModel();
         mod.setRowCount(0);

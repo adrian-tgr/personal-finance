@@ -10,7 +10,7 @@ public class TransactionDao {
         // Consulta SQL para insertar el registro y retornar el ID generado por PostgreSQL
         String sql = "INSERT INTO transactions (description, category, date, type, amount) VALUES (?, ?, ?, ?, ?) RETURNING id";
 
-        try (Connection conn = ConexionBD.obtenerConexion(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.getConexion(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             // Asignación de parámetros a los comodines (?) de la SQL
             stmt.setString(1, t.getDescription());
@@ -38,7 +38,7 @@ public class TransactionDao {
     public boolean eliminar(long id) {
         String sql = "DELETE FROM transactions WHERE id = ?";
 
-        try (Connection conn = ConexionBD.obtenerConexion(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = ConexionBD.getConexion(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
 
@@ -55,7 +55,7 @@ public class TransactionDao {
         java.util.List<ModelTransaction> lista = new java.util.ArrayList<>();
         String sql = "SELECT id, description, category, date, type, amount FROM transactions ORDER BY id ASC";
 
-        try (Connection conn = DataBase.ConexionBD.obtenerConexion(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+        try (Connection conn = DataBase.ConexionBD.getConexion(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 String tipo = rs.getString("type");
@@ -80,5 +80,26 @@ public class TransactionDao {
             System.err.println("Error al consultar transacciones en BD: " + e.getMessage());
         }
         return lista;
+    }
+
+    public boolean actualizar(ModelTransaction t) {
+        String sql = "UPDATE transactions SET description = ?, category = ?, date = ?, type = ?, amount = ? WHERE id = ?";
+
+        try (Connection conn = ConexionBD.getConexion(); // Usa el mismo método de conexión que ya tienes en TransactionDao
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, t.getDescription());
+            stmt.setString(2, t.getCategory());
+            stmt.setString(3, t.getDate());
+            stmt.setString(4, t.getType());
+            stmt.setDouble(5, t.getAmount());
+            stmt.setLong(6, t.getId());
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar transacción en BD: " + e.getMessage());
+            return false;
+        }
     }
 }
